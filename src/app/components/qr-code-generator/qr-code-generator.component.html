@@ -1,0 +1,66 @@
+<div [ngSwitch]="state">
+  <div *ngSwitchCase="'START'">
+    <form #guestQRForm="ngForm" (ngSubmit)="generateQR()">
+      <ion-list>
+        <ion-list-header>
+          <ion-label><strong class="capitalize">Create Visitor QR Code</strong></ion-label>
+        </ion-list-header>
+        <ion-item>
+          <ion-label position="floating">Name</ion-label>
+          <ion-input [(ngModel)]="guest.name" name="name" required></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Date</ion-label>
+          <ion-datetime [(ngModel)]="guest.date" name="date"
+            displayFormat="DD/MMM/YYYY" pickerFormat="DD/MMM"
+            min="2021" max="2021" required></ion-datetime>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Note</ion-label>
+          <ion-textarea [(ngModel)]="guest.note" name="note" reuqired></ion-textarea>
+        </ion-item>
+        <ion-button type="reset" fill="outline" color="error">
+          <ion-icon name="close-outline"></ion-icon>
+          <b>Clear</b>
+        </ion-button>
+        <ion-button type="submit" fill="outline" color="success" [disabled]="guestQRForm.invalid">
+          <ion-icon name="qr-code-outline"></ion-icon>
+          <b>Generate QR</b>
+        </ion-button>
+      </ion-list>
+    </form>
+  </div>
+
+  <div *ngSwitchCase="'RESULTS'">
+    <ion-card style="width:max-content;margin: 1em auto;">
+      <ion-card-header>
+        <ion-card-title><strong>Visitor card</strong></ion-card-title>
+        <ion-card-subtitle>Sagar</ion-card-subtitle>
+      </ion-card-header>
+      <ion-card-content>
+        <qrcode #visitorPass [qrdata]="visitorQRString" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-button fill="outline" color="danger" (click)="state='START'">
+      <ion-icon name="create-outline"></ion-icon>
+      <b>Edit</b>
+    </ion-button>
+    <ion-button fill="outline" (click)="saveToAlbum(visitorPass)">
+      <ion-icon name="download-outline"></ion-icon>
+      <b>Save</b>
+    </ion-button>
+    <!-- <ion-button fill="outline" color="warning" (click)="shareVisitorPassViaWhatsapp(visitorPass)">
+      <ion-icon name="share-outline"></ion-icon>
+      <b>Share</b>
+    </ion-button>
+    <ion-button fill="outline" color="warning" (click)="shareVisitorPassViaEmail(visitorPass)">
+      <ion-icon name="share-outline"></ion-icon>
+      <b>Email</b>
+    </ion-button> -->
+    <ion-button fill="outline" color="warning" (click)="share(visitorPass)">
+      <ion-icon name="share-outline"></ion-icon>
+      <b>Share</b>
+    </ion-button>
+  </div>
+</div>

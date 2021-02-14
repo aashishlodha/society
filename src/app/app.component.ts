@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { CallNumber } from '@ionic-native/call-number/ngx';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -6,13 +8,35 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   public appPages = [
-    { title: 'Inbox', url: '/folder/Inbox', icon: 'mail' },
-    { title: 'Outbox', url: '/folder/Outbox', icon: 'paper-plane' },
-    { title: 'Favorites', url: '/folder/Favorites', icon: 'heart' },
-    { title: 'Archived', url: '/folder/Archived', icon: 'archive' },
-    { title: 'Trash', url: '/folder/Trash', icon: 'trash' },
-    { title: 'Spam', url: '/folder/Spam', icon: 'warning' },
+    { title: 'Scan', url: '/Scan', icon: 'scan' },
+    { title: 'Create QR', url: '/CreateQR', icon: 'qr-code' },
+    { title: 'History', url: '/History', icon: 'book' },
+    { title: 'Profile', url: '/Profile', icon: 'person-circle' },
+    { title: 'About', url: '/About', icon: 'help' }
   ];
-  public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];
-  constructor() {}
+  public contacts = [
+    {
+      name: 'Secretary',
+      contactNo: '8149484418'
+    }, {
+      name: 'Body Member 1',
+      contactNo: '8149484418'
+    },
+    {
+      name: 'Body Member 2',
+      contactNo: '8149484418'
+    },
+    {
+      name: 'Police',
+      contactNo: '8149484418'
+    }
+  ];
+
+  constructor(private callNumberService: CallNumber) { }
+
+  callNumber(contactNo: string) {
+    this.callNumberService.callNumber(contactNo, true)
+      .then(res => console.log('Launched dialer!', res))
+      .catch(err => console.log('Error launching dialer', err));
+  }
 }

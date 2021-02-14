@@ -1,0 +1,38 @@
+<form #profileForm="ngForm" (ngSubmit)="updateProfile()">
+  <ion-list>
+    <ion-item>
+      <ion-label position="floating">First Name</ion-label>
+      <ion-input type="text" [(ngModel)]="user.firstName" pattern="[a-zA-Z]{2,32}" name="firstName" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Last Name</ion-label>
+      <ion-input type="text" [(ngModel)]="user.lastName" pattern="[a-zA-Z]{2,32}" name="lastName" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="fixed">Wing</ion-label>
+      <ion-select value="A" slot="end" [(ngModel)]="user.wing" name="wing">
+        <ion-select-option value="A">Tower A</ion-select-option>
+        <ion-select-option value="B">Tower B</ion-select-option>
+        <ion-select-option value="C">Tower C</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" required>Flat No</ion-label>
+      <ion-input type="tel" pattern="[1-7]{1}[0]{1}[1-8]{1}" [(ngModel)]="user.flatNo" name="flatNo" required></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating" required>Contact No</ion-label>
+      <ion-input type="tel" pattern="[0-9]{10}$" [(ngModel)]="user.contactNo" name="contactNo"></ion-input>
+    </ion-item>
+    <!-- <ion-item>
+      <ion-label position="fixed">Resident?</ion-label>
+      <ion-select value="true" [(ngModel)]="user.isResident" slot="end" name="isResident">
+        <ion-select-option value="true">Yes</ion-select-option>
+        <ion-select-option value="false">No</ion-select-option>
+      </ion-select>
+    </ion-item> -->
+    <ion-button type="reset" fill="outline" color="error">Clear</ion-button>
+    <ion-button type="submit" fill="outline" color="success" [disabled]="profileForm.invalid">Save</ion-button>
+
+  </ion-list>
+</form>
