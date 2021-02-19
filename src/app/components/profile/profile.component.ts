@@ -1,5 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { DataStoreService } from 'src/app/services/data-store.service';
+import { UserInfoService } from 'src/app/services/user-info.service';
 import { User } from './user.model';
 
 @Component({
@@ -7,25 +9,25 @@ import { User } from './user.model';
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss'],
 })
-export class ProfileComponent implements OnInit {
+export class ProfileComponent implements OnInit, OnDestroy {
 
   user: User = new User(null, null, null, null, null);
+  subs: Subscription[] = [];
 
-  constructor(private dataStore: DataStoreService) {
-    this.dataStore.getObject('user').then(userData => {
-      console.log('fetched User info', userData);
-      if (userData) {
-        this.user = userData;
-      }
-    });
+  constructor(private userInfo: UserInfoService) {
+    this.subs.push(this.userInfo.data.subscribe(userData => this.user = {...userData}));
   }
 
   ngOnInit() {}
 
   updateProfile() {
     let userData = {...this.user};
-    this.dataStore.setObject('user', userData);
+    this.userInfo.updateUser(userData);
     console.log(userData.toString());
+  }
+
+  ngOnDestroy(): void {
+    this.subs.forEach(sub => sub.unsubscribe());
   }
 
 }

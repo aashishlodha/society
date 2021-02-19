@@ -19,7 +19,7 @@
           <ion-label position="floating">Note</ion-label>
           <ion-textarea [(ngModel)]="guest.note" name="note" reuqired></ion-textarea>
         </ion-item>
-        <ion-button type="reset" fill="outline" color="error">
+        <ion-button type="reset" fill="outline" color="error" [disabled]="!guestQRForm.dirty">
           <ion-icon name="close-outline"></ion-icon>
           <b>Clear</b>
         </ion-button>

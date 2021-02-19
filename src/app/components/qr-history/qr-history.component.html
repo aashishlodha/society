@@ -1,3 +1,9 @@
-<p>
-  qr-history works!
-</p>
+<ion-list *ngIf="records.length > 0" lines="full">
+  <ion-item>
+    <ion-button (click)="clearHistory()">Clear History</ion-button>
+  </ion-item>
+  <ion-item *ngFor="let record of records">
+    <app-scan-record [data]="record"></app-scan-record>
+  </ion-item>
+</ion-list>
+<ion-text *ngIf="records.length === 0">No records found.</ion-text>

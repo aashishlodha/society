@@ -1,31 +1,33 @@
-import { Component, OnInit } from '@angular/core';
-import { DataStoreService } from 'src/app/services/data-store.service';
-import { User } from '../profile/user.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { UserInfoService } from 'src/app/services/user-info.service';
 
 @Component({
   selector: 'app-qr-code-display',
   templateUrl: './qr-code-display.component.html',
   styleUrls: ['./qr-code-display.component.scss'],
 })
-export class QrCodeDisplayComponent implements OnInit {
+export class QrCodeDisplayComponent implements OnInit, OnDestroy {
 
   userInfoString: string = 'Loading User Data';
+  subs: Subscription[] = [];
 
-  constructor(private dataStore: DataStoreService) {
+  constructor(private userInfo: UserInfoService) {
     console.log('Getting user info');
-    this.dataStore.getObject('user').then(userData => {
-      console.log('fetched User info', userData);
-      if (userData) {
-        this.userInfoString = JSON.stringify(userData);
-      } else {
+    this.subs.push(this.userInfo.data.subscribe(
+      user => this.userInfoString = JSON.stringify(user),
+      e => {
         let error = {
           errorMsg: 'User Information is missing.'
         };
         this.userInfoString = JSON.stringify(error);
-      }
-    });
+    }));
   }
 
   ngOnInit() {}
+
+  ngOnDestroy() {
+    this.subs.forEach(sub => sub.unsubscribe());
+  }
 
 }

@@ -8,7 +8,8 @@ export class User {
     public isResident: boolean = true,
     // public isOwner: boolean = false,
     public isGuest: boolean = false,
-    public society: string = "Shreeram Paradise"
+    public society: string = "Shreeram Paradise",
+    public errorMsg?: string
   ){}
 
   /*toString() {

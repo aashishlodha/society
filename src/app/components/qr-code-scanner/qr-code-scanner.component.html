@@ -3,14 +3,21 @@
     <ion-button fill="outline" (click)="scan()">Scan QR Code</ion-button>
   </p>
   <p *ngSwitchCase="'SCANNING'">
-    Scan in progress...
+    <ion-spinner name="crescent"></ion-spinner>
   </p>
   <p *ngSwitchCase="'RESULTS'">
-    {{ data | json }}
-    <ion-card *ngIf="user.firstName">
+    <ion-card *ngIf="user && !user.errorMsg && guest">
       <ion-card-header>
-        <ion-card-subtitle>{{user.wing}} - {{ user.flatNo }}</ion-card-subtitle>
-        <ion-card-title>{{ user.firstName + ' ' + user.lastName}}</ion-card-title>
+        <ion-card-title>Visitor</ion-card-title>
+      </ion-card-header>
+        <ion-item>Name: {{ guest.name }}</ion-item>
+        <ion-item>Date: {{ guest.date | date }}</ion-item>
+        <ion-item>Note: {{ guest.note }}</ion-item>
+    </ion-card>
+    <ion-card *ngIf="user && !user.errorMsg">
+      <ion-card-header>
+        <ion-card-subtitle>{{ user.wing }} - {{ user.flatNo }}</ion-card-subtitle>
+        <ion-card-title>{{ user.firstName + ' ' + user.lastName }}</ion-card-title>
       </ion-card-header>
       <ion-card-content>
         <ion-grid>
@@ -27,13 +34,13 @@
               <strong>Contact No</strong>
             </ion-col>
             <ion-col>
-              +91 {{ user.contactNo}}
+              +91 {{ user.contactNo }}
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
-    <ion-card *ngIf="user.errorMsg">
+    <ion-card *ngIf="user && user.errorMsg">
       {{ user.errorMsg }}
     </ion-card>
     <ion-button (click)="scanState='START'" fill="outline">Back to Scan</ion-button>

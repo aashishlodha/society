@@ -3,6 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
+import { QRCodeModule } from 'angularx-qrcode';
+import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 
 import { FolderPageRoutingModule } from './folder-routing.module';
 
@@ -11,9 +14,8 @@ import { QrCodeScannerComponent } from '../components/qr-code-scanner/qr-code-sc
 import { QrCodeGeneratorComponent } from '../components/qr-code-generator/qr-code-generator.component';
 import { ProfileComponent } from '../components/profile/profile.component';
 import { QrHistoryComponent } from '../components/qr-history/qr-history.component';
-import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
-import { QRCodeModule } from 'angularx-qrcode';
-import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { AboutComponent } from '../components/about/about.component';
+import { ScanRecordComponent } from '../components/scan-record/scan-record.component';
 
 @NgModule({
   imports: [
@@ -28,7 +30,9 @@ import { SocialSharing } from '@ionic-native/social-sharing/ngx';
     QrCodeScannerComponent,
     QrCodeGeneratorComponent,
     QrHistoryComponent,
-    ProfileComponent
+    ProfileComponent,
+    AboutComponent,
+    ScanRecordComponent
   ],
   providers: [
     BarcodeScanner,

@@ -1,5 +1,9 @@
 import { Component } from '@angular/core';
 import { CallNumber } from '@ionic-native/call-number/ngx';
+import { AlertController } from '@ionic/angular';
+import { Subscription } from 'rxjs';
+import { User } from './components/profile/user.model';
+import { UserInfoService } from './services/user-info.service';
 
 @Component({
   selector: 'app-root',
@@ -31,12 +35,41 @@ export class AppComponent {
       contactNo: '8149484418'
     }
   ];
+  subs: Subscription[] = [];
+  user: User;
 
-  constructor(private callNumberService: CallNumber) { }
+  constructor(private callNumberService: CallNumber,
+    private userInfo: UserInfoService,
+    private alertController: AlertController
+  ) {
+    this.subs.push(this.userInfo.data.subscribe(
+      userData => this.user = {...userData}));
+  }
 
-  callNumber(contactNo: string) {
-    this.callNumberService.callNumber(contactNo, true)
-      .then(res => console.log('Launched dialer!', res))
-      .catch(err => console.log('Error launching dialer', err));
+  async handleCallNumber(contactNo: string) {
+    const alert = await this.alertController.create({
+      header: 'Call?',
+      message: 'This will initiate the call to ' + contactNo,
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: blah');
+          }
+        }, {
+          text: 'Okay',
+          handler: () => {
+            console.log('Confirm Okay');
+            this.callNumberService.callNumber(contactNo, true)
+              .then(res => console.log('Launched dialer!', res))
+              .catch(err => console.log('Error launching dialer', err));
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 }

@@ -1,5 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
+import { HistoryService } from 'src/app/services/history.service';
+import { User } from '../profile/user.model';
+import { GuestQR } from '../qr-code-generator/guest.model';
+import { ScanRecord } from './scan-record.model';
 
 @Component({
   selector: 'app-qr-code-scanner',
@@ -9,9 +13,11 @@ import { BarcodeScanner } from '@ionic-native/barcode-scanner/ngx';
 export class QrCodeScannerComponent implements OnInit {
 
   scanState: 'START' | 'SCANNING' | 'RESULTS' = 'START';
-  user: any;
+  user: User;
+  guest: GuestQR;
+  userType: 'VISITOR' | 'RESIDENT';
 
-  constructor(private barcodeScanner: BarcodeScanner) {}
+  constructor(private barcodeScanner: BarcodeScanner, private history: HistoryService) {}
 
   ngOnInit() {}
 
@@ -20,6 +26,7 @@ export class QrCodeScannerComponent implements OnInit {
     let that = this;
     setTimeout(() => {
       that.scanState = 'RESULTS';
+      this.addToHistory('hhhhh');
     }, 1000);
   }
 
@@ -29,8 +36,19 @@ export class QrCodeScannerComponent implements OnInit {
     this.barcodeScanner.scan().then(barcodeData => {
       console.log('Barcode data', barcodeData);
       if (!barcodeData.cancelled) {
-        this.user = JSON.parse(barcodeData.text);
+        let userInfo = JSON.parse(barcodeData.text);
+        console.log(userInfo);
+        if (userInfo.flatNo) {
+          this.userType = 'RESIDENT';
+          this.guest = null;
+          this.user = userInfo;
+        } else {
+          this.userType = 'VISITOR';
+          this.guest = userInfo;
+          this.user = userInfo.host;
+        }
         this.scanState = 'RESULTS';
+        this.addToHistory(barcodeData.text);
       } else {
         this.scanState = 'START';
       }
@@ -38,6 +56,11 @@ export class QrCodeScannerComponent implements OnInit {
       console.log('Error', err);
       this.scanState = 'RESULTS';
     });
+  }
+
+  addToHistory(qrData) {
+    let scanRecord = new ScanRecord((new Date()).toUTCString(), qrData);
+    this.history.addScanRecord(scanRecord);
   }
 
 }
