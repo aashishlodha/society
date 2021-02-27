@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
+import { AppToastService } from 'src/app/services/app-toast.service';
 import { DataStoreService } from 'src/app/services/data-store.service';
 import { User } from '../profile/user.model';
 import { GuestQR } from './guest.model';
@@ -24,7 +25,7 @@ export class QrCodeGeneratorComponent implements OnInit {
   canShareViaWhatsapp = false;
   sharableApps: string[] = [];
 
-  constructor(private dataStore: DataStoreService, private socialSharing: SocialSharing) {
+  constructor(private dataStore: DataStoreService, private socialSharing: SocialSharing, private toastService: AppToastService) {
     this.dataStore.getObject('user').then(userData => {
       console.log('fetched User info', userData);
       if (userData) {
@@ -57,6 +58,8 @@ export class QrCodeGeneratorComponent implements OnInit {
   generateQR() {
     this.visitorQRString = JSON.stringify(this.guest);
     this.state = 'RESULTS';
+    this.toastService.presentToast('QR code generated successfully.');
+    // this.toastService.presentToastWithOptions();
   }
 
   openShareOptions() {
